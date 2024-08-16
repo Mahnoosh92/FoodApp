@@ -1,7 +1,12 @@
 package com.example.foodapp.presentation
 
 import android.os.Bundle
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,6 +16,7 @@ import com.example.foodapp.R
 import com.example.foodapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -19,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -37,17 +45,48 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                com.example.onboarding.R.id.onboardingFragment, com.example.home.R.id.homeFragment, com.example.search.R.id.searchFragment
+                com.example.onboarding.R.id.onboardingFragment,
+                com.example.home.R.id.homeFragment,
+                com.example.search.R.id.searchFragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        triggerStartDestinationEvent()
+
         setupUiListener()
+        setupCollectors()
+    }
+
+    private fun setupCollectors() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { reactTo(it) }
+            }
+        }
+    }
+    private fun reactTo(mainUiState: MainUiState) {
+        mainUiState.startDestination?.let {
+            setNavGraphStartDestination(com.example.home.R.id.home_navigation)
+        }
+    }
+    private fun setNavGraphStartDestination(startDestination: Int) {
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph_main)
+
+        navGraph.setStartDestination(startDestination)
+        navController.graph = navGraph
+    }
+    private fun triggerStartDestinationEvent() {
+        viewModel.onEvent(MainActivityEvent.DefineStartDestination)
     }
 
     private fun setupUiListener() {
-        NavController.OnDestinationChangedListener { controller, destination, arguments ->
-            supportActionBar?.title="xxx"
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == com.example.onboarding.R.id.onboardingFragment) {
+                binding.bottomNavigationView.visibility = View.GONE
+            } else {
+                binding.bottomNavigationView.visibility = View.VISIBLE
+            }
         }
     }
 }

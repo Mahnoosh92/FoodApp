@@ -55,6 +55,7 @@ android {
 
 dependencies {
 
+    implementation(project(":core:threading"))
     implementation(project(":feature:home"))
     implementation(project(":feature:cart"))
     implementation(project(":feature:profile"))
@@ -75,8 +76,8 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
-
-
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)
     // MockWebServer
