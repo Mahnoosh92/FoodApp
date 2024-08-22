@@ -52,33 +52,10 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        triggerStartDestinationEvent()
 
         setupUiListener()
-        setupCollectors()
     }
 
-    private fun setupCollectors() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { reactTo(it) }
-            }
-        }
-    }
-    private fun reactTo(mainUiState: MainUiState) {
-        mainUiState.startDestination?.let {
-            setNavGraphStartDestination(com.example.home.R.id.home_navigation)
-        }
-    }
-    private fun setNavGraphStartDestination(startDestination: Int) {
-        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph_main)
-
-        navGraph.setStartDestination(startDestination)
-        navController.graph = navGraph
-    }
-    private fun triggerStartDestinationEvent() {
-        viewModel.onEvent(MainActivityEvent.DefineStartDestination)
-    }
 
     private fun setupUiListener() {
         navController.addOnDestinationChangedListener { _, destination, _ ->

@@ -56,7 +56,9 @@ android {
 dependencies {
 
     implementation(project(":core:threading"))
+    implementation(project(":core:common"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:splash"))
     implementation(project(":feature:cart"))
     implementation(project(":feature:profile"))
     implementation(project(":feature:search"))

@@ -1,5 +1,5 @@
-package com.example.foodapp.presentation
+package com.example.splash.presentation
 
-sealed interface MainActivityEvent {
-    data object DefineStartDestination : MainActivityEvent
+sealed interface SplashActivityEvent {
+    data object DefineStartDestination : SplashActivityEvent
 }

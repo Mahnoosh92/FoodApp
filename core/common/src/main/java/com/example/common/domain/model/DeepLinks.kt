@@ -1,4 +1,4 @@
 package com.example.common.domain.model
 
-class DeepLinks {
-}
+const val ONBOARDING_DEEPLINK="foodapp://onboarding"
+const val HOME_DEEPLINK="foodapp://home"

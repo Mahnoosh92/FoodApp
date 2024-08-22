@@ -9,5 +9,8 @@
         android:id="@+id/onboardingFragment"
         android:name="com.example.onboarding.presentation.OnboardingFragment"
         android:label="fragment_onboarding"
-        tools:layout="onboarding" />
+        tools:layout="onboarding" >
+        <deepLink
+            app:uri="foodapp://onboarding" />
+    </fragment>
 </navigation>

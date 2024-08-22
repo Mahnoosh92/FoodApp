@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@+id/onboarding_naviggation">
+    app:startDestination="@+id/splash_navigation">
 
 
     <include app:graph="@navigation/onboarding_naviggation" />
@@ -11,4 +11,5 @@
     <include app:graph="@navigation/search_navigation" />
     <include app:graph="@navigation/profile_navigation" />
     <include app:graph="@navigation/cart_navigation" />
+    <include app:graph="@navigation/splash_navigation" />
 </navigation>
